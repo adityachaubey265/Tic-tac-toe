@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/your-username/tic-tac-toe.git' // or use local repo
+        git 'https://github.com/adityachaubey265/Tic-tac-toe.git' // or use local repo
       }
     }
 
