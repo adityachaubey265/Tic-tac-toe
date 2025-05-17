@@ -1,54 +1,28 @@
 pipeline {
   agent any
 
-  tools {
-    nodejs "Node 18" // You can set this under "Global Tools Configuration"
-  }
-
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/adityachaubey265/Tic-tac-toe.git' // or use local repo
+        git url: 'https://github.com/adityachaubey265/Tic-tac-toe.git', branch: 'master'
       }
     }
-
-    stage('Install Dependencies') {
-      steps {
-        sh 'npm install'
-      }
-    }
-
     stage('Build') {
       steps {
+        sh 'npm install'
         sh 'npm run build'
       }
     }
-
-    stage('Docker Build') {
+    stage('Test') {
       steps {
-        script {
-          docker.build("tic-tac-toe")
-        }
+        sh 'npm test'  // Add tests in your package.json for this to work
       }
     }
-
-    // Optional: Push to Docker Hub
-    // stage('Docker Push') {
-    //   steps {
-    //     withDockerRegistry([credentialsId: 'dockerhub-creds']) {
-    //       sh 'docker tag tic-tac-toe your-dockerhub-user/tic-tac-toe'
-    //       sh 'docker push your-dockerhub-user/tic-tac-toe'
-    //     }
-    //   }
-    // }
-  }
-
-  post {
-    success {
-      echo 'Build completed successfully!'
-    }
-    failure {
-      echo 'Build failed.'
+    stage('Deploy') {
+      steps {
+        echo 'Deploying application...'
+        // Add your deploy commands here, e.g. docker build/push or copy files to server
+      }
     }
   }
 }
